@@ -19,7 +19,7 @@ class DB_Functions {
 
     // destructor
     function __destruct() {
-        
+
     }
 
     /**
@@ -91,7 +91,7 @@ class DB_Functions {
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            // user existed 
+            // user existed
             $stmt->close();
             return true;
         } else {
@@ -125,6 +125,22 @@ class DB_Functions {
         $hash = base64_encode(sha1($password . $salt, true) . $salt);
 
         return $hash;
+    }
+
+    public function storeshop($user_id, $shop_id, $product_id) {
+
+        $stmt = $this->conn->prepare("INSERT INTO savedshops (id,user_id, shop_id, product_id) VALUES (NULL,?, ?,?);");
+        $stmt->bind_param("sss", $user_id, $shop_id, $product_id);
+        $result = $stmt->execute();
+        $stmt->close();
+
+        // check for successful store
+        if ($result) {
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
